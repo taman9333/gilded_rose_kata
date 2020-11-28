@@ -3,39 +3,21 @@ class GildedRose
     @items = items
   end
 
-  def update_quality()
+  def update_quality
     @items.each do |item|
       if sulfuras?(item)
-        if item.quality > 0
-          if !sulfuras?(item)
-            decrease_quality(item)
-          end
-        end
       elsif generic?(item)
         if item.quality > 0
-          if !sulfuras?(item)
-            decrease_quality(item)
-          end
+          decrease_quality(item)
         end
-      else
+        item.sell_in = item.sell_in - 1
+      elsif aged_brie?(item)
         if quality_less_than_50(item)
           increase_quality(item)
-          if item.name == "Backstage passes to a TAFKAL80ETC concert"
-            if item.sell_in < 11
-              if quality_less_than_50(item)
-                increase_quality(item)
-              end
-            end
-            if item.sell_in < 6
-              if quality_less_than_50(item)
-                increase_quality(item)
-              end
-            end
-          end
         end
-      end
-      if !sulfuras?(item)
         item.sell_in = item.sell_in - 1
+      elsif backstage_pass?(item)
+        handle_backstage_pass(item)
       end
       if item.sell_in < 0
         if !aged_brie?(item)
@@ -85,6 +67,23 @@ class GildedRose
 
   def generic?(item)
     !(sulfuras?(item) or backstage_pass?(item) or aged_brie?(item))
+  end
+
+  def handle_backstage_pass(item)
+    if quality_less_than_50(item)
+      increase_quality(item)
+      if item.sell_in < 11
+        if quality_less_than_50(item)
+          increase_quality(item)
+        end
+      end
+      if item.sell_in < 6
+        if quality_less_than_50(item)
+          increase_quality(item)
+        end
+      end
+    end
+    item.sell_in = item.sell_in - 1
   end
 end
 
