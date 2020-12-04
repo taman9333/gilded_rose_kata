@@ -87,48 +87,49 @@ class GildedRose
     @items = items
   end
 
-  def update_quality
-    @items.each do |item|
+  class GoodCategory
+    def build_for(item)
       if sulfuras?(item)
-        sulfuras = Sulfuras.new(item.quality, item.sell_in)
-        sulfuras.update
-        item.quality = sulfuras.quality
-        item.sell_in = sulfuras.sell_in
+        Sulfuras.new(item.quality, item.sell_in)
       elsif generic?(item)
-        generic = Generic.new(item.quality, item.sell_in)
-        generic.update
-        item.quality = generic.quality
-        item.sell_in = generic.sell_in
+        Generic.new(item.quality, item.sell_in)
       elsif aged_brie?(item)
-        aged_brie = AgedBrie.new(item.quality, item.sell_in)
-        aged_brie.update
-        item.quality = aged_brie.quality
-        item.sell_in = aged_brie.sell_in
+        AgedBrie.new(item.quality, item.sell_in)
       elsif backstage_pass?(item)
-        backstage_pass = BackstagePass.new(item.quality, item.sell_in)
-        backstage_pass.update
-        item.quality = backstage_pass.quality
-        item.sell_in = backstage_pass.sell_in
+        BackstagePass.new(item.quality, item.sell_in)
       end
+    end
+
+    private
+
+    def aged_brie?(item)
+      item.name == 'Aged Brie'
+    end
+
+    def backstage_pass?(item)
+      item.name == "Backstage passes to a TAFKAL80ETC concert"
+    end
+
+    def sulfuras?(item)
+      item.name == "Sulfuras, Hand of Ragnaros"
+    end
+
+    def generic?(item)
+      !(sulfuras?(item) or backstage_pass?(item) or aged_brie?(item))
     end
   end
 
-  private
-
-  def aged_brie?(item)
-    item.name == 'Aged Brie'
+  def initialize(items)
+    @items = items
   end
 
-  def backstage_pass?(item)
-    item.name == "Backstage passes to a TAFKAL80ETC concert"
-  end
-
-  def sulfuras?(item)
-    item.name == "Sulfuras, Hand of Ragnaros"
-  end
-
-  def generic?(item)
-    !(sulfuras?(item) or backstage_pass?(item) or aged_brie?(item))
+  def update_quality
+    @items.each do |item|
+      good = GoodCategory.new.build_for(item)
+      good.update
+      item.quality = good.quality
+      item.sell_in = good.sell_in
+    end
   end
 end
 
