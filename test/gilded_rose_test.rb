@@ -1,11 +1,15 @@
 require 'simplecov'
 SimpleCov.start
 
-
 require_relative '../gilded_rose'
 require 'minitest/autorun'
 
+require 'mutant/minitest/coverage'
+
 class TestUntitled < Minitest::Test
+
+  cover "Inventory"
+
   def test_foo
     items = [Item.new('foo', 0, 0)]
     GildedRose.new(items).update_quality
@@ -16,6 +20,13 @@ class TestUntitled < Minitest::Test
     assert_backstage_pass_quality(22, 8, 20)
     assert_backstage_pass_quality(23, 4, 20)
     assert_backstage_pass_quality(0, -4, 20)
+    assert_backstage_pass_quality(23, 1, 20)
+    assert_backstage_pass_quality(22, 6, 20)
+    assert_backstage_pass_quality(23, 5, 20)
+    assert_backstage_pass_quality(21, 12, 20)
+    assert_backstage_pass_quality(21, 11, 20)
+    assert_backstage_pass_quality(22, 10, 20)
+    assert_backstage_pass_quality(0, 0, 20)
   end
 
   def test_aged_brie
