@@ -1,3 +1,7 @@
+require 'simplecov'
+SimpleCov.start
+
+
 require_relative '../gilded_rose'
 require 'minitest/autorun'
 
