@@ -42,6 +42,15 @@ class TestUntitled < Minitest::Test
     assert_generic_quality(0, 1, 1)
   end
 
+  def test_conjured
+    assert_conjured_quality(0, -1, 3)
+    assert_conjured_quality(0, 0, 3)
+    assert_conjured_quality(1, 1, 3)
+    assert_conjured_quality(0, 1, 0)
+    assert_conjured_quality(0, 1, 1)
+    assert_conjured_quality(0, 0, 4)
+  end
+
   def test_report
     report_lines = []
     items = [
@@ -78,7 +87,7 @@ class TestUntitled < Minitest::Test
       '-------- day 1 --------', 'name, sellIn, quality', '+5 Dexterity Vest, 9, 19', 'Aged Brie, 1, 1',
       'Elixir of the Mongoose, 4, 6', 'Sulfuras, Hand of Ragnaros, 0, 80', 'Sulfuras, Hand of Ragnaros, -1, 80',
       'Backstage passes to a TAFKAL80ETC concert, 14, 21', 'Backstage passes to a TAFKAL80ETC concert, 9, 50',
-      'Backstage passes to a TAFKAL80ETC concert, 4, 50', 'Conjured Mana Cake, 2, 5', ''
+      'Backstage passes to a TAFKAL80ETC concert, 4, 50', 'Conjured Mana Cake, 2, 4', ''
     ]
 
     assert_equal(z, report_lines)
@@ -94,6 +103,12 @@ end
 
 def assert_aged_brie_quality(expected, sell_in, quality)
   items = [Item.new("Aged Brie", sell_in, quality)]
+  GildedRose.new(items).update_quality
+  assert_equal(expected, items[0].quality)
+end
+
+def assert_conjured_quality(expected, sell_in, quality)
+  items = [Item.new("Conjured Mana Cake", sell_in, quality)]
   GildedRose.new(items).update_quality
   assert_equal(expected, items[0].quality)
 end

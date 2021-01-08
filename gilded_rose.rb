@@ -108,6 +108,30 @@ class GildedRose
         quality.increase
       end
     end
+
+    class Conjured
+      def self.build(sell_in)
+        if sell_in < 0
+          Expired.new
+        else
+          new
+        end
+      end
+
+      class Expired
+        def update(quality)
+          quality.degrade
+          quality.degrade
+          quality.degrade
+          quality.degrade
+        end
+      end
+
+      def update(quality)
+        quality.degrade
+        quality.degrade
+      end
+    end
   end
 
   class GoodCategory
@@ -117,6 +141,8 @@ class GildedRose
         Inventory::AgedBrie.build(item.sell_in)
       when 'Backstage passes to a TAFKAL80ETC concert'
         Inventory::BackstagePass.build(item.sell_in)
+      when 'Conjured Mana Cake'
+        Inventory::Conjured.build(item.sell_in)
       else
         Inventory::Generic.build(item.sell_in)
       end
