@@ -1,6 +1,6 @@
 class Conjured
   def self.build(sell_in)
-    if sell_in.negative?
+    if sell_in < 0
       Expired.new
     else
       new

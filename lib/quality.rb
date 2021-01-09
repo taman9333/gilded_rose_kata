@@ -6,13 +6,11 @@ class Quality
   end
 
   def degrade
-    @amount -= 1 if amount.positive?
+    @amount -= 1 if amount > 0
   end
 
   def increase
-    if amount < 50
-      @amount += 1
-    end
+    @amount += 1 if amount < 50
   end
 
   def reset

@@ -1,6 +1,6 @@
 class BackstagePass
   def self.build(sell_in)
-    if sell_in.negative?
+    if sell_in < 0
       Expired.new
     elsif sell_in < 5
       LessThan5Days.new

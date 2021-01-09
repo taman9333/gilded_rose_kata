@@ -1,14 +1,31 @@
 require 'simplecov'
 SimpleCov.start
 
-require_relative '../gilded_rose'
+require_relative '../lib/gilded_rose'
+require_relative '../lib/item'
+
+# Require these for mutation testing
+require_relative '../lib/inventory/backstage_pass'
+require_relative '../lib/inventory/aged_brie'
+require_relative '../lib/inventory/conjured'
+require_relative '../lib/quality'
+require_relative '../lib/inventory/generic'
+require_relative '../lib/good_factory'
+
 require 'minitest/autorun'
 
 require 'mutant/minitest/coverage'
 
 class TestUntitled < Minitest::Test
-
-  cover "GildedRose"
+  # to tell mutant which subjects this tests should cover
+  cover 'GildedRose'
+  cover 'BackstagePass'
+  cover 'AgedBrie'
+  cover 'Conjured'
+  cover 'Generic'
+  cover 'Quality'
+  cover 'GoodFactory'
+  cover 'Item'
 
   def test_foo
     items = [Item.new('foo', 0, 0)]
@@ -96,25 +113,25 @@ end
 
 
 def assert_backstage_pass_quality(expected, sell_in, quality)
-  items = [Item.new("Backstage passes to a TAFKAL80ETC concert", sell_in, quality)]
+  items = [Item.new('Backstage passes to a TAFKAL80ETC concert', sell_in, quality)]
   GildedRose.new(items).update_quality
   assert_equal(expected, items[0].quality)
 end
 
 def assert_aged_brie_quality(expected, sell_in, quality)
-  items = [Item.new("Aged Brie", sell_in, quality)]
+  items = [Item.new('Aged Brie', sell_in, quality)]
   GildedRose.new(items).update_quality
   assert_equal(expected, items[0].quality)
 end
 
 def assert_conjured_quality(expected, sell_in, quality)
-  items = [Item.new("Conjured Mana Cake", sell_in, quality)]
+  items = [Item.new('Conjured Mana Cake', sell_in, quality)]
   GildedRose.new(items).update_quality
   assert_equal(expected, items[0].quality)
 end
 
 def assert_generic_quality(expected, sell_in, quality)
-  items = [Item.new("foo", sell_in, quality)]
+  items = [Item.new('foo', sell_in, quality)]
   GildedRose.new(items).update_quality
   assert_equal(expected, items[0].quality)
 end

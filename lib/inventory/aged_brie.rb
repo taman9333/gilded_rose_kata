@@ -1,21 +1,21 @@
-class Generic
+class AgedBrie
   def self.build(sell_in)
-    if sell_in.negative?
+    if sell_in < 0
       Expired.new
     else
       new
     end
   end
 
-  # Expired generic will degrade twice
+  # Expired aged brie increase twice in quality
   class Expired
     def update(quality)
-      quality.degrade
-      quality.degrade
+      quality.increase
+      quality.increase
     end
   end
 
   def update(quality)
-    quality.degrade
+    quality.increase
   end
 end
